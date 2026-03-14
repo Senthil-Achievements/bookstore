@@ -77,8 +77,7 @@ const ManageBooks = () => {
                                   {book.category}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-
-                                    ${book.newPrice}
+                                    ₹{book.newPrice}
                                 </td>
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 space-x-4">
 

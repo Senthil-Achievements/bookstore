@@ -1,4 +1,10 @@
 import {createBrowserRouter} from "react-router-dom";
+import { AuthProvide } from "../context/AuthContext";
+import About from "../pages/about/About";
+import Contact from "../pages/contact/Contact";
+import SearchPage from "../pages/search/SearchPage";
+import PrivacyPolicy from "../pages/legal/PrivacyPolicy";
+import TermsOfService from "../pages/legal/TermsOfService";
 import App from "../App";
 import Home from "../pages/home/Home";
 import Login from "../components/Login";
@@ -32,7 +38,23 @@ const router = createBrowserRouter([
         },
         {
             path: "/about",
-            element: <div>About</div>
+            element: <About/>
+        },
+        {
+            path: "/contact",
+            element: <Contact/>
+        },
+        {
+            path: "/search",
+            element: <SearchPage/>
+        },
+        {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy/>
+        },
+        {
+          path: "/terms-of-service",
+          element: <TermsOfService/>
         },
         {
           path: "/login",
@@ -68,7 +90,9 @@ const router = createBrowserRouter([
     {
       path: "/dashboard",
       element: <AdminRoute>
-        <DashboardLayout/>
+        <AuthProvide>
+          <DashboardLayout/>
+        </AuthProvide>
       </AdminRoute>,
       children:[
         {

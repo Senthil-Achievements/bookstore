@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiMiniBars3CenterLeft, HiOutlineHeart, HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
 
 const navigation = [
-    {name: "Dashboard", href:"/user-dashboard"},
+    {name: "Dashboard", href:"/dashboard"},
     {name: "Orders", href:"/orders"},
     {name: "Cart Page", href:"/cart"},
     {name: "Check Out", href:"/checkout"},
@@ -18,6 +18,8 @@ const navigation = [
 const Navbar = () => {
 
     const  [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const navigate = useNavigate()
     const cartItems = useSelector(state => state.cart.cartItems);
    
     const {currentUser, logout} = useAuth()
@@ -33,19 +35,30 @@ const Navbar = () => {
             <nav className="flex justify-between items-center">
                 {/* left side */}
                 <div className="flex items-center md:gap-16 gap-4">
-                    <Link to="/">
-                        <HiMiniBars3CenterLeft className="size-6" />
-                    </Link>
+                    <div className="relative">
+                        <Link to="/dashboard/add-new-book" className="flex items-center p-2 hover:bg-gray-100 rounded-md">
+                            <HiMiniBars3CenterLeft className="size-6" />
+                        </Link>
+                    </div>
 
                     {/* search input */}
-                    <div className="relative sm:w-72 w-40 space-x-2">
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        if (searchQuery.trim()) {
+                            navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+                        } else {
+                            navigate(`/`);
+                        }
+                    }} className="relative sm:w-72 w-40 space-x-2">
 
-                        <IoSearchOutline className="absolute inline-block left-3 inset-y-2" />
+                        <IoSearchOutline className="absolute inline-block left-3 inset-y-2 text-gray-400" />
 
                         <input type="text" placeholder="Search here"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="bg-[#EAEAEA] w-full py-1 md:px-8 px-6 rounded-md focus:outline-none"
                         />
-                    </div>
+                    </form>
                 </div>
 
 
@@ -86,9 +99,7 @@ const Navbar = () => {
                         }
                     </div>
                     
-                    <button className="hidden sm:block">
-                        <HiOutlineHeart className="size-6" />
-                    </button>
+                    {/* Removed Favorite Button */}
 
                     <Link to="/cart" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm">
                         <HiOutlineShoppingCart className='' />

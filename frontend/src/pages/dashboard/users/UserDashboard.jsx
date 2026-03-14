@@ -4,7 +4,10 @@ import { useGetOrderByEmailQuery } from '../../../redux/features/orders/ordersAp
 
 const UserDashboard = () => {
     const { currentUser } = useAuth();
-    const { data: orders = [], isLoading, isError } = useGetOrderByEmailQuery(currentUser?.email);
+    const { data: orders = [], isLoading, isError } = useGetOrderByEmailQuery(
+        currentUser?.email,
+        { skip: !currentUser?.email }
+    );
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error getting orders data</div>;
@@ -23,8 +26,8 @@ const UserDashboard = () => {
                                 <li key={order._id} className="bg-gray-50 p-4 rounded-lg shadow-sm space-y-1">
                                     <p className="font-medium">Order ID: {order._id}</p>
                                     <p>Date: {new Date(order?.createdAt).toLocaleDateString()}</p>
-                                    <p >Total: ${order.totalPrice}</p>
-                                    {order.productIds.map((productId) => (
+                                    <p >Total: ₹{order.totalPrice}</p>
+                                    {order?.productIds?.map((productId) => (
                                         <p key={productId} className='ml-1'>{productId}</p>
                                     ))}
                                 </li>
