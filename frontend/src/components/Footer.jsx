@@ -55,7 +55,7 @@ const Footer = () => {
         </div>
 
         {/* Right Side - Newsletter */}
-        <div className="md:w-1/2 w-full">
+        <div id="footer-subscribe" className="md:w-1/2 w-full">
           <p className="mb-4">
             Subscribe to our newsletter to receive the latest updates, news, and offers!
           </p>
