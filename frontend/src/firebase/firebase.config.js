@@ -14,6 +14,13 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APPID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth =  getAuth(app);
+// Initialize Firebase (conditional to prevent crash when env vars are missing)
+let app = null;
+let auth = null;
+
+if (firebaseConfig.apiKey) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+}
+
+export { auth };
