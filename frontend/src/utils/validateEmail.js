@@ -1,6 +1,8 @@
 import disposableDomains from 'disposable-email-domains';
-import disposable from 'disposable-email';
-import fakefilter from 'fakefilter';
+import fakefilterData from 'fakefilter/json/data.json';
+
+// Extract the domain list from fakefilter's raw JSON (avoids importing Node.js built-ins)
+const fakefilterDomains = Object.keys(fakefilterData.domains);
 
 export const validateEmailSecurity = async (email) => {
     if (!email) return { isValid: false, message: 'Email is required' };
@@ -23,12 +25,11 @@ export const validateEmailSecurity = async (email) => {
       'temp-mail.org', 'temp-mail.io', 'tempmailo.com'
     ]; 
     
-    // Check our current arrays and the new user-requested 'disposable-email' runtime validation
+    // Check all static domain lists 
     const isDisposable = 
       disposableDomains.includes(emailDomain) || 
       customBlocklist.includes(emailDomain) || 
-      !disposable.validate(emailDomain) ||
-      fakefilter.isFakeDomain(emailDomain);
+      fakefilterDomains.includes(emailDomain);
     
     if (isDisposable) {
       return { isValid: false, message: 'No disposable/temp emails allowed.' };
