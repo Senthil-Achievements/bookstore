@@ -29,6 +29,7 @@ const SingleBook = () => {
                         src={`${getImgUrl(book.coverImage)}`}
                         alt={book.title}
                         className="mb-8"
+                        onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x600?text=${encodeURIComponent(book?.title)}`; }}
                     />
                 </div>
 

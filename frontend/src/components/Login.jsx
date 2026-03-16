@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { useAuth } from '../context/AuthContext';
+import { validateEmailSecurity } from '../utils/validateEmail';
 
 const Login = () => {
     const [message, setMessage] = useState("")
@@ -16,6 +17,12 @@ const Login = () => {
       } = useForm()
 
       const onSubmit = async (data) => {
+        const validation = await validateEmailSecurity(data.email);
+        if (!validation.isValid) {
+            setMessage(validation.message);
+            return;
+        }
+
         try {
             await loginUser(data.email, data.password);
             alert("Login successful!");

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { useAuth } from '../context/AuthContext';
+import { validateEmailSecurity } from '../utils/validateEmail';
 
 const Register = () => {
     const [message, setMessage] = useState("");
@@ -19,6 +20,12 @@ const Register = () => {
 
       const onSubmit = async(data) => {
         // console.log(data)
+        const validation = await validateEmailSecurity(data.email);
+        if (!validation.isValid) {
+            setMessage(validation.message);
+            return;
+        }
+
         try {
             await registerUser(data.email, data.password);
             alert("User registered successfully!")

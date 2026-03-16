@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import getBaseUrl from '../utils/baseURL'
 import footerLogo  from "../assets/footer-logo.png"
+import { validateEmailSecurity } from '../utils/validateEmail'
 
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa"
 
@@ -11,6 +12,13 @@ const Footer = () => {
 
   const handleSubscribe = async () => {
     if (!email) return;
+
+    const validation = await validateEmailSecurity(email);
+    if (!validation.isValid) {
+      setSubscribeMessage(validation.message);
+      return;
+    }
+
     try {
       const response = await fetch(`${getBaseUrl()}/api/subscribers`, {
         method: 'POST',
