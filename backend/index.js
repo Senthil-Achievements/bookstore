@@ -29,11 +29,12 @@ app.use("/api/upload", uploadRoutes)
 app.use("/api/subscribers", subscriberRoutes)
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")))
 
+app.use("/", (req, res) => {
+    res.send("Book Store Server is running!");
+});
+
 async function main() {
   await mongoose.connect(process.env.DB_URL);
-  app.use("/", (req, res) => {
-    res.send("Book Store Server is running!");
-  });
 }
 
 main().then(() => console.log("Mongodb connected successfully!")).catch(err => console.log(err));
@@ -41,3 +42,5 @@ main().then(() => console.log("Mongodb connected successfully!")).catch(err => c
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+module.exports = app;
