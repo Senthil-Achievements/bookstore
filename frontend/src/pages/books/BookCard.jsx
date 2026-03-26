@@ -24,7 +24,7 @@ const BookCard = ({book}) => {
                             src={`${getImgUrl(book?.coverImage)}`}
                             alt=""
                             className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
-                            onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/400x600?text=${encodeURIComponent(book?.title)}`; }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = getImgUrl('book-2.png'); }}
                         />
                     </Link>
                 </div>

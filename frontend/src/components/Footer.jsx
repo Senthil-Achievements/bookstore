@@ -10,33 +10,24 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [subscribeMessage, setSubscribeMessage] = useState('');
 
-  const handleSubscribe = async () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!email) return;
+
+    setIsSubmitting(true);
+    setSubscribeMessage('');
 
     const validation = await validateEmailSecurity(email);
     if (!validation.isValid) {
       setSubscribeMessage(validation.message);
+      setIsSubmitting(false);
       return;
     }
 
-    try {
-      const response = await fetch(`${getBaseUrl()}/api/subscribers`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setSubscribeMessage('Subscribed successfully!');
-        setEmail('');
-      } else {
-        setSubscribeMessage(data.message || 'Subscription failed.');
-      }
-    } catch (error) {
-      setSubscribeMessage('An error occurred.');
-    }
+    // If valid, submit the form programmatically to FormSubmit
+    e.target.submit();
   };
 
   return (
@@ -59,26 +50,27 @@ const Footer = () => {
           <p className="mb-4">
             Subscribe to our newsletter to receive the latest updates, news, and offers!
           </p>
-          <div className="flex flex-col">
+          <form onSubmit={handleSubmit} action="https://formsubmit.co/lvasanth2005@gmail.com" method="POST" className="flex flex-col">
             <div className="flex">
+              {/* Optional: Configuration for FormSubmit */}
+              <input type="hidden" name="_subject" value="New Subscriber Alert!" />
+              <input type="hidden" name="_captcha" value="false" />
+              
               <input
                 type="email"
-                placeholder="Enter your email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
                 className="w-full px-4 py-2 rounded-l-md text-black"
                 required
               />
-              <button onClick={handleSubscribe} className="bg-primary px-6 py-2 rounded-r-md hover:bg-primary-dark">
-                Subscribe
+              <button disabled={isSubmitting} type="submit" className="bg-primary px-6 py-2 rounded-r-md hover:bg-primary-dark disabled:opacity-50">
+                {isSubmitting ? 'Checking...' : 'Subscribe'}
               </button>
             </div>
-            {subscribeMessage && (
-              <p className={`mt-2 text-sm font-medium ${subscribeMessage.includes('successfully') ? 'text-green-400' : 'text-red-400'}`}>
-                {subscribeMessage}
-              </p>
-            )}
-          </div>
+            {subscribeMessage && <p className="mt-2 text-sm text-red-500">{subscribeMessage}</p>}
+          </form>
         </div>
       </div>
 
